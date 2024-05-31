@@ -1,0 +1,22 @@
+		$listId = $_REQUEST['listId'];
+		
+		$result = $db_connection->prepare("call getList(?)");
+		$result->bind_param('i', $listId);
+		$result->execute();
+		$result->bind_result($id, $name);
+		
+		$obj = array("records" => array());	
+		
+		while($result->fetch())
+		{
+			array_push($obj['records'], array(rowId => $id, name => $name));
+		}
+		$result->close();
+		break;
+}
+
+if (isset($obj)){
+	echo json_encode($obj);
+}
+
+$db_connection->close();
